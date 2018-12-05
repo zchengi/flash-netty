@@ -16,6 +16,18 @@ import java.time.LocalDateTime;
 public class FirstServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+
+        System.out.println(LocalDateTime.now() + ": 服务端主动向客户端推送消息");
+
+        // 1. 获取数据
+        ByteBuf buffer = getByteBuf(ctx, "这是服务端主动发送来的消息");
+
+        // 2. 写数据
+        ctx.channel().writeAndFlush(buffer);
+    }
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
         // 收到客户端数据
@@ -24,13 +36,13 @@ public class FirstServerHandler extends ChannelInboundHandlerAdapter {
 
         // 回复数据到客户端
         System.out.println(LocalDateTime.now() + ": 服务端写出数据");
-        ByteBuf out = getByteBuf(ctx);
+        ByteBuf out = getByteBuf(ctx, "你好，欢迎访问博客: note.chengix.com");
         ctx.channel().writeAndFlush(out);
     }
 
-    private ByteBuf getByteBuf(ChannelHandlerContext ctx) {
+    private ByteBuf getByteBuf(ChannelHandlerContext ctx, String msg) {
 
-        byte[] bytes = "你好，欢迎访问博客: note.chengix.com".getBytes(Charset.forName("UTF-8"));
+        byte[] bytes = msg.getBytes(Charset.forName("UTF-8"));
 
         ByteBuf buffer = ctx.alloc().buffer();
 
