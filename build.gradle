@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+group 'com.cheng'
+version '1.0-SNAPSHOT'
+
+description = 'flash-netty'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url "http://repo.maven.apache.org/maven2" }
+    mavenCentral()
+}
+
+def nettyVersion = '4.1.6.Final'
+def lombokVersion = '1.16.12'
+def fastjsonVersion = '1.2.29'
+def junitVersion = '4.12'
+
+dependencies {
+
+    compile group: 'io.netty', name: 'netty-all', version: nettyVersion
+    compile group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    compile group: 'com.alibaba', name: 'fastjson', version: fastjsonVersion
+
+    testCompile group: 'junit', name: 'junit', version: junitVersion
+}
