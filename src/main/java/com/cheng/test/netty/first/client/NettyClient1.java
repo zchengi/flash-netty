@@ -1,4 +1,4 @@
-package com.cheng.test.netty.client;
+package com.cheng.test.netty.first.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author cheng
  *         2018/12/5 18:56
  */
-public class NettyClient {
+public class NettyClient1 {
 
     private static final int MAX_RETRY = 5;
     private static final String HOST = "127.0.0.1";

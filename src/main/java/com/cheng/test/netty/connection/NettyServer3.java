@@ -13,7 +13,7 @@ import io.netty.handler.codec.string.StringDecoder;
  * @author cheng
  *         2018/12/5 16:50
  */
-public class NettyServer {
+public class NettyServer3 {
     public static void main(String[] args) {
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();

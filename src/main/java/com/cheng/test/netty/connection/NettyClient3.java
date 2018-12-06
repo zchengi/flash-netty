@@ -14,7 +14,7 @@ import java.util.Date;
  * @author cheng
  *         2018/12/5 16:55
  */
-public class NettyClient {
+public class NettyClient3 {
     public static void main(String[] args) throws InterruptedException {
 
         Bootstrap bootstrap = new Bootstrap();

@@ -1,4 +1,4 @@
-package com.cheng.test.netty.server;
+package com.cheng.test.netty.first.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -11,7 +11,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @author cheng
  *         2018/12/5 19:14
  */
-public class NettyServer {
+public class NettyServer1 {
 
     private static final int PORT = 8000;
 
