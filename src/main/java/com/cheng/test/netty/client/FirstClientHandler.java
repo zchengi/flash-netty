@@ -1,4 +1,4 @@
-package com.cheng.the.flash.client;
+package com.cheng.test.netty.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
