@@ -1,6 +1,7 @@
 package com.cheng.the.flash.protocol;
 
 import com.cheng.the.flash.protocol.request.LoginRequestPacket;
+import com.cheng.the.flash.protocol.response.LoginResponsePacket;
 import com.cheng.the.flash.serialize.Serializer;
 import com.cheng.the.flash.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.cheng.the.flash.protocol.command.Command.LOGIN_REQUEST;
+import static com.cheng.the.flash.protocol.command.Command.LOGIN_RESPONSE;
 
 /**
  * @author cheng
@@ -39,6 +41,7 @@ public class PacketCodec {
     private PacketCodec() {
         PACKET_TYPE_MAP = new HashMap<>();
         PACKET_TYPE_MAP.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        PACKET_TYPE_MAP.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         SERIALIZER_MAP = new HashMap<>();
         JSONSerializer serializer = new JSONSerializer();

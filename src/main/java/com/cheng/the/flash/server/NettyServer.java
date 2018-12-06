@@ -7,6 +7,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.time.LocalDateTime;
+
 /**
  * @author cheng
  *         2018/12/5 19:14
@@ -30,7 +32,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new FirstServerHandler());
+                        ch.pipeline().addLast(new ServerHandler());
                     }
                 });
 
@@ -41,9 +43,9 @@ public class NettyServer {
 
         serverBootstrap.bind(port).addListener(future -> {
             if (future.isSuccess()) {
-                System.out.println("端口[" + port + "] 绑定成功!");
+                System.out.println(LocalDateTime.now() + ": 端口[" + port + "]绑定成功!");
             } else {
-                System.err.println("端口[" + port + "] 绑定失败!");
+                System.err.println(LocalDateTime.now() + ": 端口[" + port + "]绑定失败!");
             }
         });
     }

@@ -34,8 +34,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-                        // 指定连接数据读写逻辑
-                        ch.pipeline().addLast(new FirstClientHandler());
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 });
 
@@ -47,9 +46,9 @@ public class NettyClient {
         bootstrap.connect(host, port).addListener(future -> {
 
             if (future.isSuccess()) {
-                System.out.println("连接成功!");
+                System.out.println(LocalDateTime.now() + ": 连接成功!");
             } else if (retry == 0) {
-                System.err.println("重试次数已用完，放弃连接!");
+                System.err.println(LocalDateTime.now() + ":重试次数已用完，放弃连接!");
             } else {
                 // 第几次重连
                 int order = (MAX_RETRY - retry) + 1;
