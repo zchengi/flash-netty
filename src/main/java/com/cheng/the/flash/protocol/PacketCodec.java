@@ -1,7 +1,9 @@
 package com.cheng.the.flash.protocol;
 
 import com.cheng.the.flash.protocol.request.LoginRequestPacket;
+import com.cheng.the.flash.protocol.request.MessageRequestPacket;
 import com.cheng.the.flash.protocol.response.LoginResponsePacket;
+import com.cheng.the.flash.protocol.response.MessageResponsePacket;
 import com.cheng.the.flash.serialize.Serializer;
 import com.cheng.the.flash.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -10,8 +12,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.cheng.the.flash.protocol.command.Command.LOGIN_REQUEST;
-import static com.cheng.the.flash.protocol.command.Command.LOGIN_RESPONSE;
+import static com.cheng.the.flash.protocol.command.Command.*;
 
 /**
  * @author cheng
@@ -28,7 +29,7 @@ public class PacketCodec {
 
     /**
      * Key：指令
-     * value：Java对象类型
+     * value：Java 对象类型
      */
     private final Map<Byte, Class<? extends Packet>> PACKET_TYPE_MAP;
 
@@ -42,6 +43,9 @@ public class PacketCodec {
         PACKET_TYPE_MAP = new HashMap<>();
         PACKET_TYPE_MAP.put(LOGIN_REQUEST, LoginRequestPacket.class);
         PACKET_TYPE_MAP.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+
+        PACKET_TYPE_MAP.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        PACKET_TYPE_MAP.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         SERIALIZER_MAP = new HashMap<>();
         JSONSerializer serializer = new JSONSerializer();
