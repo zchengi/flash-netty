@@ -1,5 +1,6 @@
-package com.cheng.the.flash.protocol.command;
+package com.cheng.the.flash.protocol;
 
+import com.cheng.the.flash.protocol.request.LoginRequestPacket;
 import com.cheng.the.flash.serialize.Serializer;
 import com.cheng.the.flash.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -16,6 +17,8 @@ import static com.cheng.the.flash.protocol.command.Command.LOGIN_REQUEST;
  */
 public class PacketCodec {
 
+    public static final PacketCodec INSTANCE = new PacketCodec();
+
     /**
      * 魔术: 识别出数据包是否遵循自定义协议
      */
@@ -25,15 +28,15 @@ public class PacketCodec {
      * Key：指令
      * value：Java对象类型
      */
-    private static final Map<Byte, Class<? extends Packet>> PACKET_TYPE_MAP;
+    private final Map<Byte, Class<? extends Packet>> PACKET_TYPE_MAP;
 
     /**
      * key：序列化算法标识
      * value：序列化对象
      */
-    private static final Map<Byte, Serializer> SERIALIZER_MAP;
+    private final Map<Byte, Serializer> SERIALIZER_MAP;
 
-    static {
+    private PacketCodec() {
         PACKET_TYPE_MAP = new HashMap<>();
         PACKET_TYPE_MAP.put(LOGIN_REQUEST, LoginRequestPacket.class);
 
@@ -42,10 +45,10 @@ public class PacketCodec {
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(Packet packet) {
+    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
 
         // 1. 创建 ByteBuf 对象
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
 
         // 2. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);

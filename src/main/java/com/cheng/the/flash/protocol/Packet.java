@@ -1,4 +1,4 @@
-package com.cheng.the.flash.protocol.command;
+package com.cheng.the.flash.protocol;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

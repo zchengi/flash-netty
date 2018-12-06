@@ -1,5 +1,6 @@
-package com.cheng.the.flash.protocol.command;
+package com.cheng.the.flash.protocol.request;
 
+import com.cheng.the.flash.protocol.Packet;
 import lombok.Data;
 
 import static com.cheng.the.flash.protocol.command.Command.LOGIN_REQUEST;
@@ -13,7 +14,7 @@ import static com.cheng.the.flash.protocol.command.Command.LOGIN_REQUEST;
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private Integer userId;
+    private String userId;
 
     private String username;
 
