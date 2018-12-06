@@ -1,4 +1,4 @@
-package com.cheng.demo.netty;
+package com.cheng.test.netty.connection;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;

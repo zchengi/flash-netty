@@ -1,4 +1,4 @@
-package com.cheng.test.bytebuf;
+package com.cheng.test.netty.bytebuf;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
