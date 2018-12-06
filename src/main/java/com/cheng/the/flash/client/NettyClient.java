@@ -1,10 +1,12 @@
 package com.cheng.the.flash.client;
 
-import com.cheng.the.flash.protocol.PacketCodec;
+import com.cheng.the.flash.client.handler.LoginResponseHandler;
+import com.cheng.the.flash.client.handler.MessageResponseHandler;
+import com.cheng.the.flash.codec.PacketDecoder;
+import com.cheng.the.flash.codec.PacketEncoder;
 import com.cheng.the.flash.protocol.request.MessageRequestPacket;
 import com.cheng.the.flash.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -41,7 +43,11 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(new ClientHandler());
+
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
@@ -82,10 +88,7 @@ public class NettyClient {
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(channel.alloc(), packet);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(new MessageRequestPacket(line));
                 }
             }
         }).start();

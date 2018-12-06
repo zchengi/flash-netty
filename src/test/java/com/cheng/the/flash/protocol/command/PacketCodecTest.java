@@ -30,9 +30,11 @@ public class PacketCodecTest {
         loginRequestPacket.setPassword("zy123456");
 
         PacketCodec packetCodec = PacketCodec.INSTANCE;
+        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
 
         // 编码
-        ByteBuf byteBuf = packetCodec.encode(ByteBufAllocator.DEFAULT, loginRequestPacket);
+        packetCodec.encode(byteBuf, loginRequestPacket);
+
         //  解码
         Packet decodedPacket = packetCodec.decode(byteBuf);
 

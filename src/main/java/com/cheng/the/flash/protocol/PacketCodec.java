@@ -7,7 +7,6 @@ import com.cheng.the.flash.protocol.response.MessageResponsePacket;
 import com.cheng.the.flash.serialize.Serializer;
 import com.cheng.the.flash.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,10 +51,7 @@ public class PacketCodec {
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
-
-        // 1. 创建 ByteBuf 对象
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
+    public void encode(ByteBuf byteBuf, Packet packet) {
 
         // 2. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
@@ -67,8 +63,6 @@ public class PacketCodec {
         byteBuf.writeByte(packet.getCommand()); // 指令
         byteBuf.writeInt(bytes.length); // 数据部分长度
         byteBuf.writeBytes(bytes); // 数据部分
-
-        return byteBuf;
     }
 
     public Packet decode(ByteBuf byteBuf) {
@@ -79,7 +73,7 @@ public class PacketCodec {
         // 跳过版本号
         byteBuf.skipBytes(1);
 
-        // 序列化算法标识
+        // 序列化算法
         byte serializeAlgorithm = byteBuf.readByte();
 
         // 指令
