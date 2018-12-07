@@ -37,6 +37,7 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
 
+//                        ch.pipeline().addLast(newt spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());

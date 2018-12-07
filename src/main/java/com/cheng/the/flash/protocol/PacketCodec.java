@@ -24,7 +24,7 @@ public class PacketCodec {
     /**
      * 魔术: 识别出数据包是否遵循自定义协议
      */
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
 
     /**
      * Key：指令

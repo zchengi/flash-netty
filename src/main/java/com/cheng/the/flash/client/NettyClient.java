@@ -4,6 +4,7 @@ import com.cheng.the.flash.client.handler.LoginResponseHandler;
 import com.cheng.the.flash.client.handler.MessageResponseHandler;
 import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
+import com.cheng.the.flash.codec.spliter;
 import com.cheng.the.flash.protocol.request.MessageRequestPacket;
 import com.cheng.the.flash.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -44,6 +45,7 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel ch) {
 
+                        ch.pipeline().addLast(new spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
