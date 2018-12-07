@@ -26,7 +26,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
                     e.printStackTrace();
                 }
             }
-        }).start();
+        })/*.start()*/;
     }
 
     @Override
