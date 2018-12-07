@@ -2,6 +2,7 @@ package com.cheng.the.flash.server;
 
 import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
+import com.cheng.the.flash.codec.spliter;
 import com.cheng.the.flash.server.handler.LoginRequestHandler;
 import com.cheng.the.flash.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -37,7 +38,7 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
 
-//                        ch.pipeline().addLast(newt spliter());
+                        ch.pipeline().addLast(new spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());

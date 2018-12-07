@@ -6,12 +6,28 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author cheng
  *         2018/12/6 20:20
  */
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    private static final AtomicInteger connectCount = new AtomicInteger(0);
+
+    static {
+        new Thread(() -> {
+            while (true) {
+                System.out.println(LocalDateTime.now() + " - 当前客户端连接数: " + connectCount);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) {
@@ -38,5 +54,17 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     private boolean valid(LoginRequestPacket loginRequestPacket) {
         // TODO 校验流程
         return true;
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+        connectCount.incrementAndGet();
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        connectCount.decrementAndGet();
     }
 }
