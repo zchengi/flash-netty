@@ -1,5 +1,6 @@
 package com.cheng.test.netty.first.server;
 
+import com.cheng.test.netty.handler.LifeCycleTestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -30,7 +31,9 @@ public class NettyServer1 {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new FirstServerHandler());
+//                        ch.pipeline().addLast(new FirstServerHandler());
+
+                        ch.pipeline().addLast(new LifeCycleTestHandler());
                     }
                 });
 
