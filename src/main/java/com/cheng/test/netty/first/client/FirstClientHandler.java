@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 
 /**
- * 数据处理逻辑实现
+ * 数据处理逻辑实现 & 拆包粘包例子
  *
  * @author cheng
  *         2018/12/5 19:04
@@ -18,13 +18,18 @@ public class FirstClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
 
-        System.out.println(LocalDateTime.now() + ": 客户端写出数据");
+        /*System.out.println(LocalDateTime.now() + ": 客户端写出数据");
 
         // 1. 获取数据
         ByteBuf buffer = getByteBuf(ctx);
 
         // 2. 写数据
-        ctx.channel().writeAndFlush(buffer);
+        ctx.channel().writeAndFlush(buffer);*/
+
+        for (int i = 0; i < 1000; i++) {
+            ByteBuf buf = getByteBuf(ctx);
+            ctx.channel().writeAndFlush(buf);
+        }
     }
 
     @Override

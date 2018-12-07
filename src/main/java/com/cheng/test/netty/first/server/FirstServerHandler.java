@@ -35,9 +35,9 @@ public class FirstServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println(LocalDateTime.now() + ": 服务端读到数据 -> " + byteBuf.toString(Charset.forName("UTF-8")));
 
         // 回复数据到客户端
-        System.out.println(LocalDateTime.now() + ": 服务端写出数据");
+        /*System.out.println(LocalDateTime.now() + ": 服务端写出数据");
         ByteBuf out = getByteBuf(ctx, "你好，欢迎访问博客: note.chengix.com");
-        ctx.channel().writeAndFlush(out);
+        ctx.channel().writeAndFlush(out);*/
     }
 
     private ByteBuf getByteBuf(ChannelHandlerContext ctx, String msg) {
