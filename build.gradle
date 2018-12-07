@@ -4,7 +4,7 @@ apply plugin: 'maven-publish'
 group 'com.cheng'
 version '1.0-SNAPSHOT'
 
-description = 'flash-netty'
+description = 'netty-communication'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -27,4 +27,8 @@ dependencies {
     compile group: 'com.alibaba', name: 'fastjson', version: fastjsonVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
