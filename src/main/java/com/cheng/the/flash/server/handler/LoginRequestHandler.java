@@ -2,6 +2,7 @@ package com.cheng.the.flash.server.handler;
 
 import com.cheng.the.flash.protocol.request.LoginRequestPacket;
 import com.cheng.the.flash.protocol.response.LoginResponsePacket;
+import com.cheng.the.flash.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -19,7 +20,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     static {
         new Thread(() -> {
             while (true) {
-                System.out.println(LocalDateTime.now() + " - 当前客户端连接数: " + connectCount);
+                System.out.println(LocalDateTime.now() + "- 当前客户端连接数: " + connectCount);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -40,6 +41,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         // 登录校验
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
+            // 标记当前 channel 状态为已登录
+            LoginUtil.markAsLogin(ctx.channel());
             System.out.println(LocalDateTime.now() + ": 登录成功!");
         } else {
             loginResponsePacket.setReason("登录校验失败");
