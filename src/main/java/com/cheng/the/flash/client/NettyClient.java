@@ -5,8 +5,9 @@ import com.cheng.the.flash.client.handler.MessageResponseHandler;
 import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
 import com.cheng.the.flash.codec.spliter;
+import com.cheng.the.flash.protocol.request.LoginRequestPacket;
 import com.cheng.the.flash.protocol.request.MessageRequestPacket;
-import com.cheng.the.flash.util.LoginUtil;
+import com.cheng.the.flash.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -56,6 +57,38 @@ public class NettyClient {
         connect(bootstrap, HOST, PORT, MAX_RETRY);
     }
 
+    private static void startConsoleThread(Channel channel) {
+
+        Scanner sc = new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+
+                // 登录
+                if (!SessionUtil.hasLogin(channel)) {
+                    System.out.println("请输入用户名登录: ");
+
+                    String username = sc.nextLine();
+                    loginRequestPacket.setUsername(username);
+
+                    // 默认密码
+                    loginRequestPacket.setPassword("pwd");
+
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+
+                    // 发送消息
+                    String toUserId = sc.next();
+                    String message = sc.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                }
+            }
+        }).start();
+    }
+
     private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
 
         bootstrap.connect(host, port).addListener(future -> {
@@ -66,7 +99,7 @@ public class NettyClient {
                 Channel channel = ((ChannelFuture) future).channel();
                 startConsoleThread(channel);
             } else if (retry == 0) {
-                System.err.println(LocalDateTime.now() + ":重试次数已用完，放弃连接!");
+                System.err.println(LocalDateTime.now() + ": 重试次数已用完，放弃连接!");
             } else {
                 // 第几次重连
                 int order = (MAX_RETRY - retry) + 1;
@@ -80,19 +113,11 @@ public class NettyClient {
         });
     }
 
-    private static void startConsoleThread(Channel channel) {
-
-        new Thread(() -> {
-            while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入消息发送至服务端: ");
-
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
-
-                    channel.writeAndFlush(new MessageRequestPacket(line));
-                }
-            }
-        }).start();
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

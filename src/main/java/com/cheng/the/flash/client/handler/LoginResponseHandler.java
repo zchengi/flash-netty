@@ -1,13 +1,12 @@
 package com.cheng.the.flash.client.handler;
 
-import com.cheng.the.flash.protocol.request.LoginRequestPacket;
 import com.cheng.the.flash.protocol.response.LoginResponsePacket;
-import com.cheng.the.flash.util.LoginUtil;
+import com.cheng.the.flash.session.Session;
+import com.cheng.the.flash.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * @author cheng
@@ -16,35 +15,21 @@ import java.util.UUID;
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-
-        System.out.println(LocalDateTime.now() + ": 客户端开始登录");
-
-        // 创建登录对象
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-        loginRequestPacket.setUserId(UUID.randomUUID().toString());
-        loginRequestPacket.setUsername("cheng");
-        loginRequestPacket.setPassword("pwd");
-
-        // 写数据
-        ctx.channel().writeAndFlush(loginRequestPacket);
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket loginResponsePacket) {
 
-        if (loginResponsePacket.isSuccess()) {
-            System.out.println(LocalDateTime.now() + ": 客户端登录成功");
+        String userId = loginResponsePacket.getUserId();
+        String username = loginResponsePacket.getUsername();
 
-            // 设置登录状态为 已登录
-            LoginUtil.markAsLogin(ctx.channel());
+        if (loginResponsePacket.isSuccess()) {
+            System.out.println(LocalDateTime.now() + ": [" + username + "] 登录成功，userId 为: " + userId);
+            SessionUtil.bindSession(new Session(userId, username), ctx.channel());
         } else {
-            System.out.println(LocalDateTime.now() + ": 客户端登录失败，原因: " + loginResponsePacket.getReason());
+            System.out.println(LocalDateTime.now() + ": [" + username + "] 登录失败，原因: " + loginResponsePacket.getReason());
         }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println(LocalDateTime.now()+": 客户端连接被关闭");
+        System.out.println(LocalDateTime.now() + ": 客户端连接被关闭!");
     }
 }
