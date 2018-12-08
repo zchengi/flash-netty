@@ -28,7 +28,7 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         // 1. 创建一个 channel 分组
         ChannelGroup channelGroup = new DefaultChannelGroup(ctx.executor());
 
-        // 2. 筛选出待加入群的用户的 channel 和 userName
+        // 2. 筛选出待加入群的用户的 channel 和 username
         List<String> usernameList = new ArrayList<>();
         for (String userId : userIdList) {
             Channel channel = SessionUtil.getChannel(userId);
