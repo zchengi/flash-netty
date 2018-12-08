@@ -2,6 +2,7 @@ package com.cheng.the.flash.protocol.response;
 
 import com.cheng.the.flash.protocol.Packet;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import static com.cheng.the.flash.protocol.command.Command.LOGIN_RESPONSE;
 
@@ -12,6 +13,7 @@ import static com.cheng.the.flash.protocol.command.Command.LOGIN_RESPONSE;
  *         2018/12/6 13:00
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class LoginResponsePacket extends Packet {
 
     private String userId;

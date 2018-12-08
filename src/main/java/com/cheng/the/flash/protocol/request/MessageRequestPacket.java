@@ -2,6 +2,7 @@ package com.cheng.the.flash.protocol.request;
 
 import com.cheng.the.flash.protocol.Packet;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import static com.cheng.the.flash.protocol.command.Command.MESSAGE_REQUEST;
@@ -14,6 +15,7 @@ import static com.cheng.the.flash.protocol.command.Command.MESSAGE_REQUEST;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class MessageRequestPacket extends Packet {
 
     private String toUserId;
