@@ -16,8 +16,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @author cheng
  *         2018/12/5 18:56
  */
+@Slf4j
 public class NettyClient {
 
     private static final int MAX_RETRY = 5;
@@ -94,18 +95,18 @@ public class NettyClient {
         bootstrap.connect(host, port).addListener(future -> {
 
             if (future.isSuccess()) {
-                System.out.println(LocalDateTime.now() + ": 连接成功，启动控制台线程……");
+                log.info("连接成功，启动控制台线程……");
 
                 Channel channel = ((ChannelFuture) future).channel();
                 startConsoleThread(channel);
             } else if (retry == 0) {
-                System.err.println(LocalDateTime.now() + ": 重试次数已用完，放弃连接!");
+                log.error("重试次数已用完，放弃连接!");
             } else {
                 // 第几次重连
                 int order = (MAX_RETRY - retry) + 1;
                 // 本次重连的间隔
                 int delay = 1 << order;
-                System.err.println(LocalDateTime.now() + ": 连接失败，第" + order + "次重连……");
+                log.info("连接失败，第{}次重连……", order);
 
                 bootstrap.config().group().schedule(() ->
                         connect(bootstrap, host, port, retry - 1), delay, TimeUnit.SECONDS);

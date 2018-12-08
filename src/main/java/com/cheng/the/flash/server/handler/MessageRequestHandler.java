@@ -7,13 +7,13 @@ import com.cheng.the.flash.util.SessionUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author cheng
  *         2018/12/6 20:20
  */
+@Slf4j
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
 
     @Override
@@ -35,7 +35,7 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
         if (null != toUserChannel && SessionUtil.hasLogin(toUserChannel)) {
             toUserChannel.writeAndFlush(messageResponsePacket);
         } else {
-            System.err.println(LocalDateTime.now() + ": [" + messageRequestPacket.getToUserId() + "] 不在线，发送失败!");
+            log.error("[{}] 不在线，发送失败", messageRequestPacket.getToUserId());
             // todo 消息发送失败，提示发送方对方不在线
         }
     }

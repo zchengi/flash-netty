@@ -12,13 +12,13 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
-import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author cheng
  *         2018/12/5 19:14
  */
+@Slf4j
 public class NettyServer {
 
     private static final int PORT = 8000;
@@ -56,9 +56,9 @@ public class NettyServer {
 
         serverBootstrap.bind(port).addListener(future -> {
             if (future.isSuccess()) {
-                System.out.println(LocalDateTime.now() + ": 端口 [" + port + "] 绑定成功!");
+                log.info("端口 [{}] 绑定成功!", port);
             } else {
-                System.err.println(LocalDateTime.now() + ": 端口 [" + port + "] 绑定失败!");
+                log.error("端口 [{}] 绑定失败!", port);
             }
         });
     }

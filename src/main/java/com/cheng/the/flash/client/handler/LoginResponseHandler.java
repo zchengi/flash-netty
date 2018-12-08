@@ -5,13 +5,13 @@ import com.cheng.the.flash.session.Session;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author cheng
  *         2018/12/6 20:43
  */
+@Slf4j
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
 
     @Override
@@ -21,15 +21,15 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         String username = loginResponsePacket.getUsername();
 
         if (loginResponsePacket.isSuccess()) {
-            System.out.println(LocalDateTime.now() + ": [" + username + "] 登录成功，userId 为: " + userId);
+            log.info("[{}] 登录成功，userId 为: {}", username, userId);
             SessionUtil.bindSession(new Session(userId, username), ctx.channel());
         } else {
-            System.out.println(LocalDateTime.now() + ": [" + username + "] 登录失败，原因: " + loginResponsePacket.getReason());
+            log.error("[{}] 登录失败，原因: {}", username, loginResponsePacket.getReason());
         }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println(LocalDateTime.now() + ": 客户端连接被关闭!");
+        log.error("客户端连接被关闭!");
     }
 }

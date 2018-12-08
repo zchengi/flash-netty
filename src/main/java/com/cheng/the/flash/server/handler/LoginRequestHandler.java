@@ -6,8 +6,8 @@ import com.cheng.the.flash.session.Session;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author cheng
  *         2018/12/6 20:20
  */
+@Slf4j
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
 
     private static final AtomicInteger connectCount = new AtomicInteger(0);
@@ -22,7 +23,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     static {
         new Thread(() -> {
             while (true) {
-                System.out.println(LocalDateTime.now() + ": 当前客户端连接数: " + connectCount);
+                log.info("当前客户端连接数: {}", connectCount);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -48,12 +49,11 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             // 登录成功绑定到 session
             SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUsername()), ctx.channel());
 
-            System.out.println(LocalDateTime.now() + ": [" + loginRequestPacket.getUsername() + "] 登录成功!");
-
+            log.info("[{}] 登录成功!", loginRequestPacket.getUsername());
         } else {
             loginResponsePacket.setReason("登录校验失败");
             loginResponsePacket.setSuccess(false);
-            System.out.println(LocalDateTime.now() + ": 登录失败!");
+            log.error("登录失败!");
         }
 
         // 登录响应

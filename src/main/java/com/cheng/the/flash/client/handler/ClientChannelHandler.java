@@ -5,8 +5,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import io.netty.handler.traffic.TrafficCounter;
-
-import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 客户端流量监控 未实现
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
  * @author cheng
  *         2018/12/7 19:34
  */
+@Slf4j
 public class ClientChannelHandler extends SimpleChannelInboundHandler {
 
     private static GlobalChannelTrafficShapingHandler TRAFFIC_SHAPING_HANDLER;
@@ -40,9 +40,9 @@ public class ClientChannelHandler extends SimpleChannelInboundHandler {
                 final long totalRead = trafficCounter.cumulativeReadBytes();
                 final long totalWrite = trafficCounter.cumulativeWrittenBytes();
 
-                System.out.println(LocalDateTime.now() + "- total read: " + (totalRead >> 10) + " KB");
-                System.out.println(LocalDateTime.now() + "- total write: " + (totalWrite >> 10) + " KB");
-                System.out.println(LocalDateTime.now() + "- 流量监控: " + System.lineSeparator() + trafficCounter);
+                log.info("total read: {} KB", totalRead >> 10);
+                log.info("total write: {} KB", totalWrite >> 10);
+                log.info("流量监控: \n\r {} ", trafficCounter);
             }
         }).start();
     }
