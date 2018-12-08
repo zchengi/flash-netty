@@ -3,12 +3,12 @@ package com.cheng.the.flash.server.handler;
 import com.cheng.the.flash.protocol.request.LoginRequestPacket;
 import com.cheng.the.flash.protocol.response.LoginResponsePacket;
 import com.cheng.the.flash.session.Session;
+import com.cheng.the.flash.util.IdUtil;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -43,7 +43,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         // 登录校验
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            String userId = randomUserId();
+            String userId = IdUtil.randomId();
             loginResponsePacket.setUserId(userId);
 
             // 登录成功绑定到 session
@@ -76,9 +76,5 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     private boolean valid(LoginRequestPacket loginRequestPacket) {
         // TODO 校验流程
         return true;
-    }
-
-    private static String randomUserId() {
-        return UUID.randomUUID().toString().split("-")[0];
     }
 }

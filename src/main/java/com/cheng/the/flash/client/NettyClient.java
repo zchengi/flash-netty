@@ -1,12 +1,13 @@
 package com.cheng.the.flash.client;
 
+import com.cheng.the.flash.client.console.ConsoleCommandManager;
+import com.cheng.the.flash.client.console.LoginConsoleCommand;
+import com.cheng.the.flash.client.handler.CreateGroupResponseHandler;
 import com.cheng.the.flash.client.handler.LoginResponseHandler;
 import com.cheng.the.flash.client.handler.MessageResponseHandler;
 import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
 import com.cheng.the.flash.codec.spliter;
-import com.cheng.the.flash.protocol.request.LoginRequestPacket;
-import com.cheng.the.flash.protocol.request.MessageRequestPacket;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -51,6 +52,7 @@ public class NettyClient {
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -60,31 +62,17 @@ public class NettyClient {
 
     private static void startConsoleThread(Channel channel) {
 
-        Scanner sc = new Scanner(System.in);
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
+        Scanner scanner = new Scanner(System.in);
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
-
                 // 登录
                 if (!SessionUtil.hasLogin(channel)) {
-                    System.out.println("请输入用户名登录: ");
-
-                    String username = sc.nextLine();
-                    loginRequestPacket.setUsername(username);
-
-                    // 默认密码
-                    loginRequestPacket.setPassword("pwd");
-
-                    // 发送登录数据包
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+                    loginConsoleCommand.exec(scanner, channel);
                 } else {
-
-                    // 发送消息
-                    String toUserId = sc.next();
-                    String message = sc.next();
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    consoleCommandManager.exec(scanner, channel);
                 }
             }
         }).start();
@@ -114,11 +102,5 @@ public class NettyClient {
         });
     }
 
-    private static void waitForLoginResponse() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

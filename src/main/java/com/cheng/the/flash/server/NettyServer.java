@@ -4,6 +4,7 @@ import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
 import com.cheng.the.flash.codec.spliter;
 import com.cheng.the.flash.server.handler.AuthHandler;
+import com.cheng.the.flash.server.handler.CreateGroupRequestHandler;
 import com.cheng.the.flash.server.handler.LoginRequestHandler;
 import com.cheng.the.flash.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -45,6 +46,7 @@ public class NettyServer {
                         // 新增用户认证 handler
                         ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new CreateGroupRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
