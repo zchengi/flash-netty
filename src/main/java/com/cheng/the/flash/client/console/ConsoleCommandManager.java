@@ -24,6 +24,7 @@ public class ConsoleCommandManager implements ConsoleCommand {
         consoleCommandMap.put("logout", new LogoutConsoleCommand());
         consoleCommandMap.put("createGroup", new CreateGroupConsoleCommand());
         consoleCommandMap.put("listGroupMembers", new ListGroupMembersConsoleCommand());
+        consoleCommandMap.put("sendToGroup", new SendToGroupConsoleCommand());
         consoleCommandMap.put("joinGroup", new JoinGroupConsoleCommand());
         consoleCommandMap.put("quitGroup", new QuitGroupConsoleCommand());
     }
@@ -33,6 +34,8 @@ public class ConsoleCommandManager implements ConsoleCommand {
 
         // 获取第一个指令
         String command = scanner.next();
+        // 过滤结束字符
+        scanner.nextLine();
 
         if (!SessionUtil.hasLogin(channel)) {
             return;

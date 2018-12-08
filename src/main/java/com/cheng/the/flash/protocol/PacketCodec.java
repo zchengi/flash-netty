@@ -59,6 +59,9 @@ public class PacketCodec {
         PACKET_TYPE_MAP.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
         PACKET_TYPE_MAP.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
 
+        PACKET_TYPE_MAP.put(GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
+        PACKET_TYPE_MAP.put(GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
+
         SERIALIZER_MAP = new HashMap<>();
         JSONSerializer serializer = new JSONSerializer();
         SERIALIZER_MAP.put(serializer.getSerializerAlgorithm(), serializer);
