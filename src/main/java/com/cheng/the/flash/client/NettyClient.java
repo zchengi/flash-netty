@@ -2,13 +2,10 @@ package com.cheng.the.flash.client;
 
 import com.cheng.the.flash.client.console.ConsoleCommandManager;
 import com.cheng.the.flash.client.console.LoginConsoleCommand;
-import com.cheng.the.flash.client.handler.CreateGroupResponseHandler;
-import com.cheng.the.flash.client.handler.LoginResponseHandler;
-import com.cheng.the.flash.client.handler.LogoutResponseHandler;
-import com.cheng.the.flash.client.handler.MessageResponseHandler;
+import com.cheng.the.flash.client.handler.*;
 import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
-import com.cheng.the.flash.codec.spliter;
+import com.cheng.the.flash.codec.Spliter;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -49,12 +46,22 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel ch) {
 
-                        ch.pipeline().addLast(new spliter());
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
+                        // 登录响应处理器
                         ch.pipeline().addLast(new LoginResponseHandler());
-                        ch.pipeline().addLast(new LogoutResponseHandler());
+                        // 收消息处理器
                         ch.pipeline().addLast(new MessageResponseHandler());
+                        // 创建群响应处理器
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        // 获取群成员响应处理器
+                        ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+                        // 加群响应处理器
+                        ch.pipeline().addLast(new JoinGroupResponseHandler());
+                        // 退群响应处理器
+                        ch.pipeline().addLast(new QuitGroupResponseHandler());
+                        // 登出响应处理器
+                        ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });

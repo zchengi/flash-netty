@@ -18,12 +18,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
 
-    private static final AtomicInteger connectCount = new AtomicInteger(0);
+    private static final AtomicInteger CONNECT_COUNT = new AtomicInteger(0);
 
     static {
         new Thread(() -> {
             while (true) {
-                log.info("当前客户端连接数: {}", connectCount);
+                log.info("当前客户端连接数: {}", CONNECT_COUNT);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -62,12 +62,12 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        connectCount.incrementAndGet();
+        CONNECT_COUNT.incrementAndGet();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        connectCount.decrementAndGet();
+        CONNECT_COUNT.decrementAndGet();
 
         // 用户断线后取消绑定
         SessionUtil.unBindSession(ctx.channel());

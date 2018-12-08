@@ -3,6 +3,7 @@ package com.cheng.the.flash.util;
 import com.cheng.the.flash.attribute.Attributes;
 import com.cheng.the.flash.session.Session;
 import io.netty.channel.Channel;
+import io.netty.channel.group.ChannelGroup;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -22,6 +23,8 @@ public class SessionUtil {
      * userId -> channel 映射
      */
     private static final Map<String, Channel> USER_ID_CHANNEL_MAP = new ConcurrentHashMap<>();
+
+    private static final Map<String, ChannelGroup> GROUP_ID_CHANNEL_GROUP_MAP = new ConcurrentHashMap<>();
 
     private SessionUtil() {}
 
@@ -50,5 +53,13 @@ public class SessionUtil {
 
     public static Channel getChannel(String userId) {
         return USER_ID_CHANNEL_MAP.get(userId);
+    }
+
+    public static void bindChannelGroup(String groupId, ChannelGroup channelGroup) {
+        GROUP_ID_CHANNEL_GROUP_MAP.put(groupId, channelGroup);
+    }
+
+    public static ChannelGroup getChannelGroup(String groupId) {
+        return GROUP_ID_CHANNEL_GROUP_MAP.get(groupId);
     }
 }

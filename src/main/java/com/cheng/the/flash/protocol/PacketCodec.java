@@ -1,13 +1,7 @@
 package com.cheng.the.flash.protocol;
 
-import com.cheng.the.flash.protocol.request.CreateGroupRequestPacket;
-import com.cheng.the.flash.protocol.request.LoginRequestPacket;
-import com.cheng.the.flash.protocol.request.LogoutRequestPacket;
-import com.cheng.the.flash.protocol.request.MessageRequestPacket;
-import com.cheng.the.flash.protocol.response.CreateGroupResponsePacket;
-import com.cheng.the.flash.protocol.response.LoginResponsePacket;
-import com.cheng.the.flash.protocol.response.LogoutResponsePacket;
-import com.cheng.the.flash.protocol.response.MessageResponsePacket;
+import com.cheng.the.flash.protocol.request.*;
+import com.cheng.the.flash.protocol.response.*;
 import com.cheng.the.flash.serialize.Serializer;
 import com.cheng.the.flash.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -55,6 +49,15 @@ public class PacketCodec {
 
         PACKET_TYPE_MAP.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         PACKET_TYPE_MAP.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+
+        PACKET_TYPE_MAP.put(LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+        PACKET_TYPE_MAP.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
+
+        PACKET_TYPE_MAP.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        PACKET_TYPE_MAP.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+
+        PACKET_TYPE_MAP.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        PACKET_TYPE_MAP.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
 
         SERIALIZER_MAP = new HashMap<>();
         JSONSerializer serializer = new JSONSerializer();

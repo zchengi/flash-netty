@@ -10,5 +10,5 @@ import java.util.Scanner;
  */
 public interface ConsoleCommand {
 
-    void exec(Scanner sc, Channel channel);
+    void exec(Scanner scanner, Channel channel);
 }

@@ -48,6 +48,9 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         // 4. 给每个客户端发送拉入群的通知
         channelGroup.writeAndFlush(createGroupResponsePacket);
 
+        // 5. 保存群组相关的信息
+        SessionUtil.bindChannelGroup(groupId, channelGroup);
+
         log.info("群创建成功，id 为 [{}],群成员为: {}", groupId, usernameList);
     }
 }
