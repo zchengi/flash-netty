@@ -2,9 +2,9 @@ package com.cheng.the.flash.client.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import io.netty.handler.traffic.TrafficCounter;
+import io.netty.util.concurrent.EventExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -14,21 +14,20 @@ import lombok.extern.slf4j.Slf4j;
  *         2018/12/7 19:34
  */
 @Slf4j
-public class ClientChannelHandler extends SimpleChannelInboundHandler {
+public class ClientTrafficChannelHandler extends SimpleChannelInboundHandler {
 
     private static GlobalChannelTrafficShapingHandler TRAFFIC_SHAPING_HANDLER;
 
-    public ClientChannelHandler(NioEventLoopGroup workerGroup) {
-        TRAFFIC_SHAPING_HANDLER = new GlobalChannelTrafficShapingHandler(workerGroup);
-        init();
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
+        trafficMonitoring(ctx.executor());
     }
 
-    private void init() {
+    private void trafficMonitoring(EventExecutor executor) {
+
+        TRAFFIC_SHAPING_HANDLER = new GlobalChannelTrafficShapingHandler(executor);
         new Thread(() -> {
             while (true) {
-                if (TRAFFIC_SHAPING_HANDLER == null) {
-                    break;
-                }
                 TrafficCounter trafficCounter = TRAFFIC_SHAPING_HANDLER.trafficCounter();
 
                 try {
@@ -45,9 +44,5 @@ public class ClientChannelHandler extends SimpleChannelInboundHandler {
                 log.info("流量监控: \n\r {} ", trafficCounter);
             }
         }).start();
-    }
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
     }
 }
