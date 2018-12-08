@@ -2,9 +2,11 @@ package com.cheng.the.flash.protocol;
 
 import com.cheng.the.flash.protocol.request.CreateGroupRequestPacket;
 import com.cheng.the.flash.protocol.request.LoginRequestPacket;
+import com.cheng.the.flash.protocol.request.LogoutRequestPacket;
 import com.cheng.the.flash.protocol.request.MessageRequestPacket;
 import com.cheng.the.flash.protocol.response.CreateGroupResponsePacket;
 import com.cheng.the.flash.protocol.response.LoginResponsePacket;
+import com.cheng.the.flash.protocol.response.LogoutResponsePacket;
 import com.cheng.the.flash.protocol.response.MessageResponsePacket;
 import com.cheng.the.flash.serialize.Serializer;
 import com.cheng.the.flash.serialize.impl.JSONSerializer;
@@ -48,8 +50,8 @@ public class PacketCodec {
         PACKET_TYPE_MAP.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         PACKET_TYPE_MAP.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
-//        PACKET_TYPE_MAP.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
-//        PACKET_TYPE_MAP.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        PACKET_TYPE_MAP.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        PACKET_TYPE_MAP.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
 
         PACKET_TYPE_MAP.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         PACKET_TYPE_MAP.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);

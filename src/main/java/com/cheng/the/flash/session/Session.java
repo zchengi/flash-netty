@@ -25,6 +25,6 @@ public class Session {
 
     @Override
     public String toString() {
-        return userId + ": " + username;
+        return userId + ":" + username;
     }
 }

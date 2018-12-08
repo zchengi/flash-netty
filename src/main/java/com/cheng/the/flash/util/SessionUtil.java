@@ -3,6 +3,7 @@ package com.cheng.the.flash.util;
 import com.cheng.the.flash.attribute.Attributes;
 import com.cheng.the.flash.session.Session;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author cheng
  *         2018/12/7 22:17
  */
+@Slf4j
 public class SessionUtil {
 
     /**
@@ -30,13 +32,16 @@ public class SessionUtil {
 
     public static void unBindSession(Channel channel) {
         if (hasLogin(channel)) {
-            USER_ID_CHANNEL_MAP.remove(getSession(channel).getUserId());
+            Session session = getSession(channel);
+            USER_ID_CHANNEL_MAP.remove(session.getUserId());
             channel.attr(Attributes.SESSION).set(null);
+
+            log.info(session + " 退出登录!");
         }
     }
 
     public static boolean hasLogin(Channel channel) {
-        return channel.hasAttr(Attributes.SESSION);
+        return getSession(channel) != null;
     }
 
     public static Session getSession(Channel channel) {
