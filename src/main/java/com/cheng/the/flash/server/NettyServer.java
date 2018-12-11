@@ -1,7 +1,6 @@
 package com.cheng.the.flash.server;
 
-import com.cheng.the.flash.codec.PacketDecoder;
-import com.cheng.the.flash.codec.PacketEncoder;
+import com.cheng.the.flash.codec.PacketCodecHandler;
 import com.cheng.the.flash.codec.Spliter;
 import com.cheng.the.flash.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
@@ -38,9 +37,11 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
 
                         ch.pipeline().addLast(new Spliter());
-                        ch.pipeline().addLast(new PacketDecoder());
 
                         // 单例模式，多个 channel 共享同一个 handler
+
+                        // 解码编码处理器
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
 
                         // 登录请求处理器
                         ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
@@ -60,8 +61,6 @@ public class NettyServer {
                         ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
                         // 登出请求处理器
                         ch.pipeline().addLast(LogoutRequestHandler.INSTANCE);
-
-                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
