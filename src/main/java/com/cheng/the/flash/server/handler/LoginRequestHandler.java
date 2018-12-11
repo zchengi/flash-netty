@@ -46,6 +46,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) {
 
+        long startTime = System.currentTimeMillis();
+
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
         loginResponsePacket.setUsername(loginRequestPacket.getUsername());
@@ -67,7 +69,13 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         }
 
         // 登录响应
-        ctx.channel().writeAndFlush(loginResponsePacket);
+        ctx.writeAndFlush(loginResponsePacket).addListener(future -> {
+            if (future.isDone()) {
+                // 计算执行完毕时间
+                log.info("登录耗时: {} ms", System.currentTimeMillis() - startTime);
+            }
+        });
+
     }
 
     @Override
