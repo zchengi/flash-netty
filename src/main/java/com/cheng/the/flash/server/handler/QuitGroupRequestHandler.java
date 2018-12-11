@@ -3,6 +3,7 @@ package com.cheng.the.flash.server.handler;
 import com.cheng.the.flash.protocol.request.QuitGroupRequestPacket;
 import com.cheng.the.flash.protocol.response.QuitGroupResponsePacket;
 import com.cheng.the.flash.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -11,7 +12,12 @@ import io.netty.channel.group.ChannelGroup;
  * @author cheng
  *         2018/12/8 18:38
  */
+@ChannelHandler.Sharable
 public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGroupRequestPacket> {
+
+    public static final QuitGroupRequestHandler INSTANCE = new QuitGroupRequestHandler();
+
+    private QuitGroupRequestHandler() {}
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, QuitGroupRequestPacket quitGroupRequestPacket) {

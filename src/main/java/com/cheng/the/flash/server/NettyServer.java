@@ -39,23 +39,28 @@ public class NettyServer {
 
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
+
+                        // 单例模式，多个 channel 共享同一个 handler
+
                         // 登录请求处理器
-                        ch.pipeline().addLast(new LoginRequestHandler());
-                        ch.pipeline().addLast(new AuthHandler());
+                        ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        // 身份验证处理器
+                        ch.pipeline().addLast(AuthHandler.INSTANCE);
                         // 单聊消息请求处理器
-                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
                         // 创建群请求处理器
-                        ch.pipeline().addLast(new CreateGroupRequestHandler());
+                        ch.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
                         // 获取群成员请求处理器
-                        ch.pipeline().addLast(new ListGroupMembersRequestHandler());
+                        ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
                         // 消息群发请求处理器
-                        ch.pipeline().addLast(new GroupMessageRequestHandler());
+                        ch.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
                         // 加群请求处理器
-                        ch.pipeline().addLast(new JoinGroupRequestHandler());
+                        ch.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
                         // 退群请求处理器
-                        ch.pipeline().addLast(new QuitGroupRequestHandler());
+                        ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
                         // 登出请求处理器
-                        ch.pipeline().addLast(new LogoutRequestHandler());
+                        ch.pipeline().addLast(LogoutRequestHandler.INSTANCE);
+
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });

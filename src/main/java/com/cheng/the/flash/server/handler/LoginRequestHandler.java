@@ -5,6 +5,7 @@ import com.cheng.the.flash.protocol.response.LoginResponsePacket;
 import com.cheng.the.flash.session.Session;
 import com.cheng.the.flash.util.IdUtil;
 import com.cheng.the.flash.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  *         2018/12/6 20:20
  */
 @Slf4j
+// 1. 加上注解标识，表明该 handler 是可以多个 channel 共享的
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    /**
+     * 构造单例
+     */
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
 
     private static final AtomicInteger CONNECT_COUNT = new AtomicInteger(0);
 
@@ -32,6 +40,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             }
         })/*.start()*/;
     }
+
+    private LoginRequestHandler() {}
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) {

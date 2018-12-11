@@ -5,6 +5,7 @@ import com.cheng.the.flash.protocol.response.MessageResponsePacket;
 import com.cheng.the.flash.session.Session;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,12 @@ import lombok.extern.slf4j.Slf4j;
  *         2018/12/6 20:20
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
+
+    public static final MessageRequestHandler INSTANCE = new MessageRequestHandler();
+
+    private MessageRequestHandler() {}
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) {
