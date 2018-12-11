@@ -2,7 +2,9 @@ package com.cheng.the.flash.server;
 
 import com.cheng.the.flash.codec.PacketCodecHandler;
 import com.cheng.the.flash.codec.Spliter;
-import com.cheng.the.flash.server.handler.*;
+import com.cheng.the.flash.server.handler.AuthHandler;
+import com.cheng.the.flash.server.handler.IMHandler;
+import com.cheng.the.flash.server.handler.LoginRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -37,30 +39,15 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
 
                         ch.pipeline().addLast(new Spliter());
-
-                        // 单例模式，多个 channel 共享同一个 handler
-
                         // 解码编码处理器
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
-
                         // 登录请求处理器
                         ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
                         // 身份验证处理器
                         ch.pipeline().addLast(AuthHandler.INSTANCE);
-                        // 单聊消息请求处理器
-                        ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
-                        // 创建群请求处理器
-                        ch.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
-                        // 获取群成员请求处理器
-                        ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
-                        // 消息群发请求处理器
-                        ch.pipeline().addLast(GroupMessageRequestHandler.INSTANCE);
-                        // 加群请求处理器
-                        ch.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
-                        // 退群请求处理器
-                        ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
-                        // 登出请求处理器
-                        ch.pipeline().addLast(LogoutRequestHandler.INSTANCE);
+
+                        // 合并平行 handler
+                        ch.pipeline().addLast(IMHandler.INSTANCE);
                     }
                 });
 
