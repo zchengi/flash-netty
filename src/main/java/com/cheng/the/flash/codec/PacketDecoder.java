@@ -8,12 +8,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
 
 /**
- * @see PacketCodecHandler
- *
  * @author cheng
  *         2018/12/6 20:13
  */
-@Deprecated
 public class PacketDecoder extends ByteToMessageDecoder {
 
     @Override

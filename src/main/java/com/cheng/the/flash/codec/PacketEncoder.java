@@ -7,12 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
- * @see PacketCodecHandler
- *
  * @author cheng
  *         2018/12/6 20:36
  */
-@Deprecated
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
     @Override

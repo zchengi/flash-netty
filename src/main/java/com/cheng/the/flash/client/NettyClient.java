@@ -6,6 +6,7 @@ import com.cheng.the.flash.client.handler.*;
 import com.cheng.the.flash.codec.PacketDecoder;
 import com.cheng.the.flash.codec.PacketEncoder;
 import com.cheng.the.flash.codec.Spliter;
+import com.cheng.the.flash.handler.IMIdleStateHandler;
 import com.cheng.the.flash.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -46,6 +47,9 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel ch) {
 
+                        // 空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
+
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         // 登录响应处理器
@@ -65,6 +69,9 @@ public class NettyClient {
                         // 登出响应处理器
                         ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
+
+                        // 心跳定时器
+                        ch.pipeline().addLast(new HeartbeatTimerHandler());
                     }
                 });
 
