@@ -37,13 +37,13 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
 
         // 2. 筛选出待加入群的用户的 channel 和 username
         List<String> usernameList = new ArrayList<>();
-        for (String userId : userIdList) {
+        usernameList.forEach(userId -> {
             Channel channel = SessionUtil.getChannel(userId);
             if (channel != null) {
                 channelGroup.add(channel);
                 usernameList.add(SessionUtil.getSession(channel).getUsername());
             }
-        }
+        });
 
         // 3. 创建群聊结果响应
         CreateGroupResponsePacket createGroupResponsePacket = new CreateGroupResponsePacket();
